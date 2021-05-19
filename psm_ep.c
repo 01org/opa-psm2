@@ -89,9 +89,6 @@ static psm2_error_t psmi_ep_open_device(const psm2_ep_t ep,
  * hfi.
  */
 
-static psm2_error_t psmi_parse_devices(int devices[PTL_MAX_INIT],
-				      const char *devstr);
-static int psmi_device_is_enabled(const int devices[PTL_MAX_INIT], int devid);
 int psmi_ep_device_is_enabled(const psm2_ep_t ep, int devid);
 
 psm2_error_t __psm2_ep_num_devunits(uint32_t *num_units_o)
@@ -1491,7 +1488,6 @@ fail:
 
 /* Get a list of PTLs we want to use.  The order is important, it affects
  * whether node-local processes use shm or ips */
-static
 psm2_error_t
 psmi_parse_devices(int devices[PTL_MAX_INIT], const char *devstring)
 {
@@ -1562,7 +1558,6 @@ fail:
 
 }
 
-static
 int psmi_device_is_enabled(const int devid_enabled[PTL_MAX_INIT], int devid)
 {
 	int i;

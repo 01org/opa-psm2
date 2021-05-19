@@ -379,6 +379,20 @@ int psmi_hal_initialize(void)
 	return -PSM_HAL_ERROR_INIT_FAILED;
 }
 
+/* psmi_hal_initialize_null */
+void psmi_hal_initialize_null(void)
+{
+	static struct _psmi_hal_instance nullhal = {
+		.type = PSM_HAL_INSTANCE_NULL,
+		.description = "NULL HAL (hardware disabled)",
+		.hfi_name = "null",
+		.hfi_sys_class_path = "/dev/null",
+		.params = {0}
+	};
+
+	psmi_hal_current_hal_instance = &nullhal;
+}
+
 int psmi_hal_finalize(void)
 {
 	struct _psmi_hal_instance *p = psmi_hal_current_hal_instance;

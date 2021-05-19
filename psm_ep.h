@@ -236,4 +236,9 @@ struct psm2_epaddr {
 	PSMI_PROFILE_UNBLOCK();						\
 } while (0)
 
+
+psm2_error_t psmi_parse_devices(int devices[PTL_MAX_INIT],
+				      const char *devstr);
+int psmi_device_is_enabled(const int devices[PTL_MAX_INIT], int devid);
+
 #endif /* _PSMI_EP_H */

@@ -75,6 +75,7 @@ typedef enum
 	PSM_HAL_INSTANCE_GEN2    =  2,
 	PSM_HAL_INSTANCE_GEN3    =  3,
 
+	PSM_HAL_INSTANCE_NULL	 = 98,
 #ifdef PSM2_MOCK_TESTING
 	PSM_HAL_INSTANCE_MOCK    = 99,
 #endif
@@ -701,6 +702,7 @@ void psmi_hal_register_instance(psmi_hal_instance_t *);
     INSTANCES are registered, or PSM_HAL_ERROR_INIT_FAILED when
     another failure has occured during initialization. */
 int psmi_hal_initialize(void);
+void psmi_hal_initialize_null(void);
 
 int psmi_hal_finalize(void);
 

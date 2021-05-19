@@ -384,6 +384,8 @@ psm2_error_t __psm2_init(int *major, int *minor)
 {
 	psm2_error_t err = PSM2_OK;
 	union psmi_envvar_val env_tmask;
+	union psmi_envvar_val devs;
+	int devid_enabled[PTL_MAX_INIT];
 
 	psmi_log_initialize();
 
@@ -538,12 +540,26 @@ psm2_error_t __psm2_init(int *major, int *minor)
 
 	psmi_epid_init();
 
-	int rc = psmi_hal_initialize();
+	psmi_getenv("PSM2_DEVICES",
+		    "Ordered list of PSM-level devices",
+		    PSMI_ENVVAR_LEVEL_USER,
+		    PSMI_ENVVAR_TYPE_STR,
+		    (union psmi_envvar_val)PSMI_DEVICES_DEFAULT, &devs);
 
-	if (rc)
-	{
-		err = PSM2_INTERNAL_ERR;
+	if ((err = psmi_parse_devices(devid_enabled, devs.e_str)))
 		goto fail;
+
+	/* setup a dummy (null) hal if we are not using PTL_DEVID_IPS */
+	if (!psmi_device_is_enabled(devid_enabled, PTL_DEVID_IPS)) {
+		psmi_hal_initialize_null();
+	} else {
+		int rc = psmi_hal_initialize();
+
+		if (rc)
+		{
+			err = PSM2_INTERNAL_ERR;
+			goto fail;
+		}
 	}
 
 #ifdef PSM_CUDA
