@@ -118,13 +118,13 @@ ifneq (icc,${CC})
 		RET := $(shell echo "int main() {}" | ${CC} ${MAVX2} -E -dM -xc - 2>&1 | grep -q AVX2 ; echo $$?)
 	else
 		RET := $(shell echo "int main() {}" | ${CC} ${MAVX2} -E -dM -xc - 2>&1 | grep -q AVX ; echo $$?)
-		$(warning ***NOTE TO USER**** Disabling AVX2 will harm performance)
+                anerr := $(warning ***NOTE TO USER**** Disabling AVX2 will harm performance)
 	endif
 
 	ifeq (0,${RET})
 		BASECFLAGS += ${MAVX2}
 	else
-		$(error Compiler does not support ${MAVX2} )
+		anerr := $(error Compiler does not support ${MAVX2} )
 	endif
 else
 		BASECFLAGS += ${MAVX2}
@@ -138,7 +138,7 @@ ifneq (,${PSM_AVX512})
 		ifeq (0,${RET})
 			BASECFLAGS += -mavx512f
 		else
-			$(error Compiler does not support AVX512 )
+			anerr := $(error Compiler does not support AVX512 )
 		endif
 		BASECFLAGS += -DPSM_AVX512
 	endif
@@ -203,7 +203,7 @@ else
 		BASECFLAGS += -funwind-tables -Wno-strict-aliasing -Wformat-security
 	else
 		ifneq (${CCARCH},gcc4)
-			$(error Unknown compiler arch "${CCARCH}")
+			anerr := $(error Unknown compiler arch "${CCARCH}")
 		endif # gcc4
 	endif # gcc
 endif # icc
